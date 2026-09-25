@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Para Você <3</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+            background-color: black;
+            /* Ajusta o tamanho para ficar bom no celular */
+            width: 90vmin;
+            height: 90vmin;
+            max-width: 400px;
+            max-height: 400px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="heartCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById('heartCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Configura o tamanho interno do canvas (resolução)
+        canvas.width = 400;
+        canvas.height = 400;
+
+        // Centraliza o desenho no canvas
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        // Inverte o eixo Y para o desenho ficar para cima
+        ctx.scale(15, -15);
+
+        let t = 0;
+        function draw() {
+            // Limpa a tela com rastro para criar o efeito de brilho
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillRect(-canvas.width/2, -canvas.height/2, canvas.width, canvas.height);
+
+            // Gera a forma do coração usando as equações matemáticas
+            ctx.beginPath();
+            for (let i = 0; i < 1000; i++) {
+                let angle = (i / 1000) * Math.PI * 2;
+
+                // Equações matemáticas do coração
+                let x = 16 * Math.pow(Math.sin(angle), 3);
+                let y = 13 * Math.cos(angle) - 5 * Math.cos(2 * angle) - 2 * Math.cos(3 * angle) - Math.cos(4 * angle);
+
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+            ctx.closePath();
+
+            // Define a cor do coração (vermelho neon)
+            // Adiciona um brilho sutil
+            ctx.shadowBlur = 20;
+            ctx.shadowColor = 'red';
+            ctx.strokeStyle = 'red';
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+
+            // Reseta o brilho para não afetar o fundo
+            ctx.shadowBlur = 0;
+
+            requestAnimationFrame(draw);
+        }
+        draw();
+    </script>
+</body>
+</html>
